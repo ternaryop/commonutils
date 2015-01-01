@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">CommonUtils</string>
+    <string name="open_with_title">Open With</string>
+    <string name="default_viewer_file_type_label">Set as default viewer for this file type</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <string name="cancel_label">Cancel</string>
+    <string name="content_image">image</string>
+</resources>
