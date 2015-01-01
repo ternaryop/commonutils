@@ -135,6 +135,7 @@ public abstract class DrawerActionBarActivity extends ActionBarActivity implemen
         selectedMenuChanged = true;
 
         setDrawerListSelection(position);
+        closeDrawer();
         onDrawerItemSelected(getAdapter().getItem(position));
         return true;
     }
@@ -144,7 +145,6 @@ public abstract class DrawerActionBarActivity extends ActionBarActivity implemen
         getDrawerList().setSelection(position);
         setTitle(getAdapter().getItem(position).getTitle());
         getSupportActionBar().setSubtitle(null);
-        closeDrawer();
     }
 
     /**
