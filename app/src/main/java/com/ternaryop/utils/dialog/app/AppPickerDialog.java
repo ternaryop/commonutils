@@ -15,9 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.ternaryop.utils.R;
@@ -32,11 +32,14 @@ public class AppPickerDialog extends Dialog implements AdapterView.OnItemClickLi
     private PackageManager manager;
     private OnClickListener dialogClickListener;
     private ResolveInfo selectedApp;
+    private String fullPath;
     private final String mimeType;
-    private final CheckBox defaultViewerCheckBox;
+    private final RadioButton defaultViewerRadio;
+    private final RadioButton defaultViewerPerFileRadio;
 
-    public AppPickerDialog(Context context, String mimeType) {
+    public AppPickerDialog(Context context, String fullPath, String mimeType) {
         super(context);
+        this.fullPath = fullPath;
         this.mimeType = mimeType;
         setContentView(R.layout.dialog_app_picker);
 
@@ -45,10 +48,20 @@ public class AppPickerDialog extends Dialog implements AdapterView.OnItemClickLi
         manager = getContext().getPackageManager();
 
         findViewById(R.id.cancelButton).setOnClickListener(this);
-        defaultViewerCheckBox = (CheckBox) findViewById(R.id.default_viewer);
+        defaultViewerRadio = (RadioButton) findViewById(R.id.default_viewer);
+        defaultViewerPerFileRadio = (RadioButton) findViewById(R.id.default_viewer_per_file);
+
         if (mimeType.startsWith("*/")) {
-            defaultViewerCheckBox.setVisibility(View.GONE);
+            defaultViewerRadio.setVisibility(View.GONE);
+        } else {
+            String[] type = mimeType.split("/");
+            if (type.length == 2) {
+                String label = context.getResources().getString(R.string.default_viewer_specific_mime_type_label, type[1]);
+                defaultViewerRadio.setText(label);
+            }
         }
+
+        defaultViewerPerFileRadio.setChecked(AppPickerUtils.hasDefaultViewer(context, fullPath));
 
         resolveInfoAdapter = new ResolveInfoAdapter(context);
         resolveInfoAdapter.addAll(getActivitiesFromMimeType(mimeType));
@@ -68,14 +81,21 @@ public class AppPickerDialog extends Dialog implements AdapterView.OnItemClickLi
     private void onOpenApp() {
         dismiss();
 
-        if (selectedApp != null && defaultViewerCheckBox.isChecked()) {
-            String[] type = mimeType.split("/");
-            if (type.length == 2 && !type[0].equals("*") && !type[1].equals("*")) {
+        if (selectedApp != null) {
+            if (defaultViewerRadio.isChecked()) {
+                // remove default path (if any)
+                AppPickerUtils.resetDefaultViewer(getContext(), fullPath);
+                String[] type = mimeType.split("/");
+                if (type.length == 2 && !type[0].equals("*") && !type[1].equals("*")) {
+                    ActivityInfo activity = selectedApp.activityInfo;
+                    AppPickerUtils.setDefaultViewer(getContext(), mimeType,
+                            activity.applicationInfo.packageName, activity.name);
+                }
+            } else if (defaultViewerPerFileRadio.isChecked()) {
                 ActivityInfo activity = selectedApp.activityInfo;
-                AppPickerUtils.setDefaultViewer(getContext(), mimeType,
+                AppPickerUtils.setDefaultViewer(getContext(), fullPath,
                         activity.applicationInfo.packageName, activity.name);
             }
-
         }
         if (dialogClickListener != null) {
             dialogClickListener.onClick(this, BUTTON_POSITIVE);

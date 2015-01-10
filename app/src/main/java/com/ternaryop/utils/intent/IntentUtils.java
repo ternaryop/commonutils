@@ -15,6 +15,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
 import com.ternaryop.utils.dialog.app.AppPickerDialog;
+import com.ternaryop.utils.dialog.app.AppPickerUtils;
 
 
 /**
@@ -47,10 +48,10 @@ public class IntentUtils {
 
     public static void startViewActivity(final Activity activity,
                                          final String path,
-                                         final ComponentName componentName,
                                          final String mimeType,
                                          boolean useDefaultViewer) {
         if (useDefaultViewer) {
+            ComponentName componentName = AppPickerUtils.getDefaultViewerComponentName(activity, path, mimeType);
             Intent intent = getAppIntentFromMimeType(activity.getPackageManager(), path, componentName, mimeType);
 
             // use default saved viewer
@@ -60,7 +61,7 @@ public class IntentUtils {
             }
         }
 
-        final AppPickerDialog appPickerDialog = new AppPickerDialog(activity, mimeType);
+        final AppPickerDialog appPickerDialog = new AppPickerDialog(activity, path, mimeType);
         appPickerDialog.setOpenAppClickListener(new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

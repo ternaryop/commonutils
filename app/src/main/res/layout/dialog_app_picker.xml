@@ -19,12 +19,18 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <CheckBox
-            android:id="@+id/default_viewer"
-            android:text="@string/default_viewer_file_type_label"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
-
+        <RadioGroup android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+            <RadioButton android:id="@+id/default_viewer"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/default_viewer_mime_type_label"/>
+            <RadioButton android:id="@+id/default_viewer_per_file"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:text="@string/default_viewer_file_type_label"/>
+        </RadioGroup>
         <Button
             android:id="@+id/cancelButton"
             style="?android:attr/buttonBarButtonStyle"

@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">CommonUtils</string>
     <string name="open_with_title">Open With</string>
-    <string name="default_viewer_file_type_label">Set as default viewer for this file type</string>
+    <string name="default_viewer_mime_type_label">Set as default viewer for this file type</string>
+    <string name="default_viewer_specific_mime_type_label">Set as default viewer for \'%1$s\' file type</string>
+    <string name="default_viewer_file_type_label">Set as default viewer for this file</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

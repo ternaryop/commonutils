@@ -2,7 +2,6 @@ package com.ternaryop.utils.dialog.app;
 
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
@@ -18,13 +17,32 @@ public class AppPickerUtils {
             throw new IllegalArgumentException("Default viewer type can't be empty");
         }
 
-        SharedPreferences.Editor edit = PreferenceManager.getDefaultSharedPreferences(context).edit();
-        edit.putString(DEFAULT_VIEWER_PREFIX + mimeType, activityPackage + "\t" + activityName);
-        edit.apply();
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .putString(DEFAULT_VIEWER_PREFIX + mimeType, activityPackage + "\t" + activityName)
+                .apply();
     }
 
-    public static ComponentName getDefaultViewerComponentName(Context context, String mimeType) {
-        String viewer = PreferenceManager.getDefaultSharedPreferences(context).getString(DEFAULT_VIEWER_PREFIX + mimeType, null);
+    public static void resetDefaultViewer(Context context, String mimeType) {
+        if (!TextUtils.isEmpty(mimeType)) {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                    .edit()
+                    .remove(DEFAULT_VIEWER_PREFIX + mimeType).apply();
+        }
+    }
+
+    public static boolean hasDefaultViewer(Context context, String mimeType) {
+        if (!TextUtils.isEmpty(mimeType)) {
+            return PreferenceManager.getDefaultSharedPreferences(context).contains(DEFAULT_VIEWER_PREFIX + mimeType);
+        }
+        return false;
+    }
+
+    public static ComponentName getDefaultViewerComponentName(Context context, String fullPath, String mimeType) {
+        String viewer = PreferenceManager.getDefaultSharedPreferences(context).getString(DEFAULT_VIEWER_PREFIX + fullPath, null);
+        if (viewer == null) {
+            viewer = PreferenceManager.getDefaultSharedPreferences(context).getString(DEFAULT_VIEWER_PREFIX + mimeType, null);
+        }
 
         if (viewer != null) {
             String[] comps = viewer.split("\t");
