@@ -51,6 +51,9 @@ public abstract class AbsProgressIndicatorAsyncTask<Params, Progress, Result> ex
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+        if (isRunning()) {
+            cancel(true);
+        }
     }
 
     protected void onPreExecute() {
