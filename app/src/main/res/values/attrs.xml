@@ -19,4 +19,9 @@
         <attr name="topDrawerToolbarPopupTheme" format="reference"/>
 
     </declare-styleable>
+
+    <declare-styleable name="com.ternaryop.widget.CheckableImageView">
+        <attr name="clickedColor" format="color"/>
+        <attr name="clickedBackground" format="color"/>
+    </declare-styleable>
 </resources>
