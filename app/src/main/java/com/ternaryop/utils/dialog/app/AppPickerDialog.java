@@ -32,7 +32,7 @@ public class AppPickerDialog extends Dialog implements AdapterView.OnItemClickLi
     private PackageManager manager;
     private OnClickListener dialogClickListener;
     private ResolveInfo selectedApp;
-    private String fullPath;
+    private final String fullPath;
     private final String mimeType;
     private final RadioButton defaultViewerRadio;
     private final RadioButton defaultViewerPerFileRadio;

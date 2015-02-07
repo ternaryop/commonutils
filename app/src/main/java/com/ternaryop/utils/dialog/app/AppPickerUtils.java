@@ -32,10 +32,7 @@ public class AppPickerUtils {
     }
 
     public static boolean hasDefaultViewer(Context context, String mimeType) {
-        if (!TextUtils.isEmpty(mimeType)) {
-            return PreferenceManager.getDefaultSharedPreferences(context).contains(DEFAULT_VIEWER_PREFIX + mimeType);
-        }
-        return false;
+        return !TextUtils.isEmpty(mimeType) && PreferenceManager.getDefaultSharedPreferences(context).contains(DEFAULT_VIEWER_PREFIX + mimeType);
     }
 
     public static ComponentName getDefaultViewerComponentName(Context context, String fullPath, String mimeType) {
