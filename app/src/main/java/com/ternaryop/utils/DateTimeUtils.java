@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by dave on 08/06/14.
@@ -40,7 +41,8 @@ public class DateTimeUtils {
      * passed timestamp
      */
     public static long daysSinceTimestamp(long timestamp) {
-        Calendar cal = Calendar.getInstance();
+        // Use GMT to normalize and ignore daylight differences
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
@@ -52,7 +54,7 @@ public class DateTimeUtils {
         if (timestamp == Long.MAX_VALUE) {
             days = Long.MAX_VALUE;
         } else {
-            cal = Calendar.getInstance();
+            cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
             cal.setTime(new Date(timestamp));
             cal.set(Calendar.HOUR_OF_DAY, 0);
             cal.set(Calendar.MINUTE, 0);
