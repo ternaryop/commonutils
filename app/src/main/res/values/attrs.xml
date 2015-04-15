@@ -20,8 +20,12 @@
 
     </declare-styleable>
 
-    <declare-styleable name="com.ternaryop.widget.CheckableImageView">
+    <declare-styleable name="com.ternaryop.widget.ClickableTextView">
         <attr name="clickedColor" format="color"/>
         <attr name="clickedBackground" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="com.ternaryop.widget.CheckableImageView">
+        <attr name="checkedColorFilter" format="color"/>
     </declare-styleable>
 </resources>
