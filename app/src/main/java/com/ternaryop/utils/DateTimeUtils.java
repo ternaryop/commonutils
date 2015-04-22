@@ -1,35 +1,21 @@
 package com.ternaryop.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
+
+import org.joda.time.Days;
+import org.joda.time.LocalDate;
+import org.joda.time.Years;
+import org.joda.time.format.DateTimeFormat;
 
 /**
  * Created by dave on 08/06/14.
  * Contains methods to compute days, years
  */
 public class DateTimeUtils {
+    public final static int APPEND_DATE_FOR_PAST_AND_PRESENT = 1;
+
     public static int yearsBetweenDates(Calendar from, Calendar to) {
-        if (from.after(to)) {
-            Calendar temp = to;
-            to = from;
-            from = temp;
-        }
-        int years = to.get(Calendar.YEAR) - from.get(Calendar.YEAR);
-
-        if (years != 0) {
-            // increment months by 1 because are zero based
-            int fromSpan = (from.get(Calendar.MONTH) + 1) * 100 + from.get(Calendar.DAY_OF_MONTH);
-            int toSpan = (to.get(Calendar.MONTH) + 1) * 100 + to.get(Calendar.DAY_OF_MONTH);
-
-            if (toSpan < fromSpan) {
-                --years;
-            }
-        }
-
-        return years;
+        return Years.yearsBetween(new LocalDate(from), new LocalDate(to)).getYears();
     }
 
     /**
@@ -41,54 +27,42 @@ public class DateTimeUtils {
      * passed timestamp
      */
     public static long daysSinceTimestamp(long timestamp) {
-        // Use GMT to normalize and ignore daylight differences
-        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        long nowTime = cal.getTimeInMillis();
-        long dayTime = 24 * 60 * 60 * 1000;
-        long days;
-
         if (timestamp == Long.MAX_VALUE) {
-            days = Long.MAX_VALUE;
-        } else {
-            cal = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-            cal.setTime(new Date(timestamp));
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-
-            long tsWithoutTime = cal.getTimeInMillis();
-            long spanTime = nowTime - tsWithoutTime;
-            days = spanTime / dayTime;
+            return Long.MAX_VALUE;
         }
-        return days;
+        return Days.daysBetween(new LocalDate(timestamp), new LocalDate()).getDays();
     }
 
-    public static String formatPublishDaysAgo(long timestamp) {
-        long days = daysSinceTimestamp(timestamp);
-        String dayString;
+    public static String formatPublishDaysAgo(long timestamp, int flags) {
+        StringBuffer dayString = new StringBuffer();
 
-        if (days == Long.MAX_VALUE) {
-            dayString = "Never Published";
+        if (timestamp == Long.MAX_VALUE) {
+            dayString.append("Never Published");
         } else {
+            long days = daysSinceTimestamp(timestamp);
             if (days < 0) {
                 if (days == -1) {
-                    dayString = new SimpleDateFormat("'Tomorrow at' HH:mm", Locale.US).format(new Date(timestamp));
+                    DateTimeFormat.forPattern("'Tomorrow at' HH:mm").printTo(dayString, timestamp);
                 } else {
-                    dayString = new SimpleDateFormat("'In " + (-days) + " days at' HH:mm", Locale.US).format(new Date(timestamp));
+                    String s = DateTimeFormat.forPattern("'In %1$d days at' HH:mm").print(timestamp);
+                    dayString.append(String.format(s, -days));
                 }
-            } else if (days == 0) {
-                dayString = new SimpleDateFormat("'Today at' HH:mm", Locale.US).format(new Date(timestamp));
-            } else if (days == 1) {
-                dayString = "Yesterday";
             } else {
-                dayString = days + " days ago";
+                if (days == 0) {
+                    DateTimeFormat.forPattern("'Today at' HH:mm").printTo(dayString, timestamp);
+                } else if (days == 1) {
+                    dayString.append("Yesterday");
+                } else {
+                    dayString.append(String.format("%1$d days ago", days));
+                }
+                boolean appendDate = (flags & APPEND_DATE_FOR_PAST_AND_PRESENT) != 0;
+                if (days > 1 && appendDate) {
+                    dayString.append(" (");
+                    DateTimeFormat.forPattern("dd/MM/yyyy").printTo(dayString, timestamp);
+                    dayString.append(")");
+                }
             }
         }
-        return dayString;
+        return dayString.toString();
     }
 }
