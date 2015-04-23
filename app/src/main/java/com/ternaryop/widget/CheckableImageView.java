@@ -1,7 +1,6 @@
 package com.ternaryop.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.Checkable;

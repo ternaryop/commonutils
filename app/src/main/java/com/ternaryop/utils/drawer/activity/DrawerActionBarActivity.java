@@ -3,8 +3,8 @@ package com.ternaryop.utils.drawer.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +17,7 @@ import com.ternaryop.utils.drawer.adapter.DrawerAdapter;
 import com.ternaryop.utils.drawer.adapter.DrawerItem;
 
 
-public abstract class DrawerActionBarActivity extends ActionBarActivity implements DrawerLayout.DrawerListener {
+public abstract class DrawerActionBarActivity extends AppCompatActivity implements DrawerLayout.DrawerListener {
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
