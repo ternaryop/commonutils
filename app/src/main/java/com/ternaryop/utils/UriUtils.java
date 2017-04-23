@@ -1,5 +1,10 @@
 package com.ternaryop.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -171,6 +176,44 @@ public class UriUtils {
         } finally {
             if (cursor != null) {
                 cursor.close();
+            }
+        }
+    }
+
+    /**
+     * URI doesn't encode invalid characters, so we do it
+     * For example the url http://my.com/hello\u00a0-world.jpg is fixed into
+     * http://my.com/hello%C2%A0-world.jpg
+     * @param uriStr the url to convert to URI
+     * @param enc the encoding to use
+     * @param retryCount how many time must retry before throw exception
+     * @return the fixed url
+     * @throws URISyntaxException unable to encode the illegal characters
+     * @throws UnsupportedEncodingException unable to encode the url
+     */
+    public static URI encodeIllegalChar(final String uriStr, String enc, int retryCount) throws URISyntaxException, UnsupportedEncodingException {
+        String _uriStr = uriStr;
+        while (true) {
+            try {
+                return new URI(_uriStr);
+            } catch(URISyntaxException e) {
+                String reason = e.getReason();
+                if (reason == null ||
+                        !(
+                                reason.contains("in path") ||
+                                        reason.contains("in query") ||
+                                        reason.contains("in fragment")
+                        )
+                        ) {
+                    throw e;
+                }
+                if (0 > retryCount--) {
+                    throw e;
+                }
+                String input = e.getInput();
+                int idx = e.getIndex();
+                String illChar = String.valueOf(input.charAt(idx));
+                _uriStr = input.replace(illChar, URLEncoder.encode(illChar, enc));
             }
         }
     }
