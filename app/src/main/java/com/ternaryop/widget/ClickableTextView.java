@@ -8,9 +8,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.TextView;
 
-public class ClickableTextView extends TextView implements OnTouchListener {
+public class ClickableTextView extends android.support.v7.widget.AppCompatTextView implements OnTouchListener {
 
     private int defaultColor;
     private Drawable defaultBackground;

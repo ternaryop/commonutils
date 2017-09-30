@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.widget.Checkable;
 import android.widget.ImageView;
 
-public class CheckableImageView extends ImageView implements Checkable {
+public class CheckableImageView extends android.support.v7.widget.AppCompatImageView implements Checkable {
     public static final String PACKAGE_NAME = "http://schemas.android.com/apk/res-auto";
     public static final int DEFAULT_CHECKED_COLOR_FILTER = 0x88000000;
     private boolean isChecked;
@@ -55,4 +55,23 @@ public class CheckableImageView extends ImageView implements Checkable {
         setChecked(!isChecked);
     }
 
+    /**
+     * Using TouchListener listener doesn't work everytime, for example with gridview_photo_picker_item the color doens't always change
+     * if the action == MotionEvent.ACTION_DOWN returns false then the MotionEvent.ACTION_UP isn't called (this is the documented behavior) and the image stay highlighted
+     * if the action == MotionEvent.ACTION_DOWN returns true the onClickListener isn't called (this is the documented behavior)
+     * @param pressed true if pressed, false otherwise
+     */
+    @Override
+    public void setPressed(boolean pressed) {
+        if (!isChecked()) {
+            if (pressed) {
+                getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                invalidate();
+            } else {
+                getDrawable().clearColorFilter();
+                invalidate();
+            }
+        }
+        super.setPressed(pressed);
+    }
 }

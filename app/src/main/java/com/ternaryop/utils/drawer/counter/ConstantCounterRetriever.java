@@ -17,7 +17,7 @@ public class ConstantCounterRetriever implements CountRetriever {
     @Override
     public void updateCount(TextView textView) {
         if (count > 0) {
-            textView.setText(count.toString());
+            textView.setText(String.valueOf(count));
             textView.setVisibility(View.VISIBLE);
         }
     }

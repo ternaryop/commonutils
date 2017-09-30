@@ -3,54 +3,37 @@ package com.ternaryop.widget;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.ImageView;
 
-public class ClickableImageView extends ImageView implements OnTouchListener {
+public class ClickableImageView extends android.support.v7.widget.AppCompatImageView {
 
     public ClickableImageView(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
-        setOnTouchListener(this);
     }
 
     public ClickableImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        setOnTouchListener(this);
     }
 
-    public ClickableImageView(Context context, int checkableId) {
-        super(context);
-        setOnTouchListener(this);
-    }
-    
     public ClickableImageView(Context context) {
         super(context);
-        setOnTouchListener(this);
     }
 
+    /**
+     * Using TouchListener listener doesn't work everytime, for example with gridview_photo_picker_item the color doens't always change
+     * if the action == MotionEvent.ACTION_DOWN returns false then the MotionEvent.ACTION_UP isn't called (this is the documented behavior) and the image stay highlighted
+     * if the action == MotionEvent.ACTION_DOWN returns true the onClickListener isn't called (this is the documented behavior)
+     * @param pressed true if pressed, false otherwise
+     */
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                //overlay is black with transparency of 0x77 (119)
-                getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
-                invalidate();
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                //clear the overlay
-                getDrawable().clearColorFilter();
-                invalidate();
-                break;
-            }
+    public void setPressed(boolean pressed) {
+        if (pressed) {
+            getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+            invalidate();
+        } else {
+            getDrawable().clearColorFilter();
+            invalidate();
         }
-
-        // allow target view to handle click
-        return false;
+        super.setPressed(pressed);
     }
 }
