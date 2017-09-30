@@ -18,7 +18,7 @@ public class ShareUtils {
         sharingIntent.setType(mimeType);
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
         sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, uri);
-        sharingIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        sharingIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
         
         context.startActivity(Intent.createChooser(sharingIntent, chooserTitle));
     }
