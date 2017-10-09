@@ -1,6 +1,7 @@
 package com.ternaryop.utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -84,5 +85,13 @@ public class JSONUtils {
             sb.append(line);
         }
         return (JSONObject) new JSONTokener(sb.toString()).nextValue();
+    }
+
+    public static JSONObject jsonFromUrl(String url) throws IOException, JSONException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            URLUtils.saveURL(url, os);
+            String str = new String(os.toByteArray(), "UTF-8");
+            return (JSONObject) (new JSONTokener(str)).nextValue();
+        }
     }
 }
