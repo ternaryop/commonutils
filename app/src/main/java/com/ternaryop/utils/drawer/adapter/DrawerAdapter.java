@@ -43,8 +43,13 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
         // the header hasn't counter
         if (holder.counter != null) {
             holder.counter.setVisibility(View.GONE);
-            if (item.isCounterVisible() && item.getCountRetriever() != null) {
-                item.getCountRetriever().updateCount(holder.counter);
+            if (item.isCounterVisible()) {
+                if (item.getCountRetriever() != null) {
+                    item.getCountRetriever().updateCount(holder.counter);
+                } else if (item.getBadge() != null && !item.getBadge().trim().isEmpty()) {
+                    holder.counter.setText(String.valueOf(item.getBadge()));
+                    holder.counter.setVisibility(View.VISIBLE);
+                }
             }
         }
         return convertView;
@@ -88,5 +93,16 @@ public class DrawerAdapter extends ArrayAdapter<DrawerItem> {
             title = (TextView) view.findViewById(android.R.id.text1);
             counter = (TextView) view.findViewById(R.id.counter);
         }
+    }
+
+    public DrawerItem getItemById(int id) {
+        for (int i = 0; i < getCount(); i++) {
+            final DrawerItem item = getItem(i);
+
+            if (item.getItemId() == id) {
+                return item;
+            }
+        }
+        return null;
     }
 }

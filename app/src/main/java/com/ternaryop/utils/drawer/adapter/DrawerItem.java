@@ -7,25 +7,33 @@ import com.ternaryop.utils.drawer.counter.CountRetriever;
 
 public class DrawerItem {
     public final static DrawerItemDivider DRAWER_ITEM_DIVIDER = new DrawerItemDivider();
+    private int itemId;
     private String title;
     private Class<? extends Fragment> fragmentClass;
     private boolean counterVisible;
     private CountRetriever countRetriever;
     private final boolean isHeader;
     private final boolean isDivider;
+    private String badge;
 
     public DrawerItem() {
-        this(null, null, false, null);
+        this(-1, null, null, false);
     }
 
-    public DrawerItem(String title) {
-        this(title, null, false, null);
+    public DrawerItem(int itemId, String title) {
+        this(itemId, title, null, false);
     }
     
-    public DrawerItem(String title, Class<? extends Fragment> fragmentClass) {
-        this(title, fragmentClass, false, null);
+    public DrawerItem(int itemId, String title, Class<? extends Fragment> fragmentClass) {
+        this(itemId, title, fragmentClass, false);
     }
 
+    public DrawerItem(int itemId, String title, Class<? extends Fragment> fragmentClass, boolean showCounter) {
+        this(title, fragmentClass, showCounter, null);
+        this.itemId = itemId;
+    }
+
+    @Deprecated
     public DrawerItem(String title, Class<? extends Fragment> fragmentClass, boolean showCounter, CountRetriever countRetriever) {
         this.title = title;
         this.fragmentClass = fragmentClass;
@@ -79,6 +87,22 @@ public class DrawerItem {
         return Fragment.instantiate(context, getFragmentClass().getName());
     }
 
+    public String getBadge() {
+        return badge;
+    }
+
+    public void setBadge(String badge) {
+        this.badge = badge;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
     public static class DrawerItemDivider extends DrawerItem {
         @Override
         public void setTitle(String title) {
@@ -94,6 +118,14 @@ public class DrawerItem {
 
         @Override
         public void setCountRetriever(CountRetriever countRetriever) {
+        }
+
+        @Override
+        public void setBadge(String badge) {
+        }
+
+        @Override
+        public void setItemId(int itemId) {
         }
     }
 }

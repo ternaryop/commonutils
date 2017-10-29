@@ -7,6 +7,7 @@ import android.widget.TextView;
  * Created by dave on 31/12/14.
  * Contains a constant value, after creation it never updates
 */
+@Deprecated
 public class ConstantCounterRetriever implements CountRetriever {
     private final Long count;
 
