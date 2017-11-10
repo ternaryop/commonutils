@@ -93,4 +93,15 @@ public class ImageUtils {
             }
         }
     }
+
+    public static Bitmap getScaledBitmap(Bitmap bitmap, int scaledWidth, int scaledHeight, boolean portrait) {
+        if (portrait) {
+            if (bitmap.getHeight() > scaledHeight) {
+                return ImageUtils.getResizedBitmap(bitmap, scaledWidth, scaledHeight);
+            }
+        }
+        return bitmap;
+    }
+
+
 }
