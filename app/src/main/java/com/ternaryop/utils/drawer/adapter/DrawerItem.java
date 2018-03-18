@@ -1,7 +1,7 @@
 package com.ternaryop.utils.drawer.adapter;
 
-import android.app.Fragment;
 import android.content.Context;
+import android.support.v4.app.Fragment;
 
 import com.ternaryop.utils.drawer.counter.CountRetriever;
 
