@@ -125,10 +125,13 @@ public abstract class DrawerActionBarActivity extends AppCompatActivity implemen
      * Select menu item from clicked position in drawer list.
      * If the position is valid and differs from the current one then call setDrawerListSelection and onDrawerItemSelected
      * @param position the item postion
-     * @return true if new mene item has been selected, false otherwise
+     * @return true if new menu item has been selected, false otherwise
      */
     protected boolean selectClickedItem(int position) {
         if (lastClickedMenuIndex == position) {
+            return false;
+        }
+        if (position < 0 || getAdapter().getCount() < position) {
             return false;
         }
         lastClickedMenuIndex = position;
@@ -141,8 +144,13 @@ public abstract class DrawerActionBarActivity extends AppCompatActivity implemen
     }
 
     protected void setDrawerListSelection(int position) {
-        getDrawerList().setItemChecked(position, true);
-        getDrawerList().setSelection(position);
+        final ListView list = getDrawerList();
+
+        if (position < 0 || list.getAdapter().getCount() < position) {
+            return;
+        }
+        list.setItemChecked(position, true);
+        list.setSelection(position);
         setTitle(getAdapter().getItem(position).getTitle());
         getSupportActionBar().setSubtitle(null);
     }
