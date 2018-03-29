@@ -1,8 +1,12 @@
 package com.ternaryop.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 
 public class DialogUtils {
 
@@ -11,11 +15,11 @@ public class DialogUtils {
     }
 
     public static void showErrorDialog(Context context, String title, Throwable t) {
-        showSimpleMessageDialog(context, title, t.getLocalizedMessage());
+        showSimpleMessageDialog(context, title, TextUtils.join("\n\n", getExceptionMessageChain(t)));
     }
 
     public static void showErrorDialog(Context context, int resId, Throwable t) {
-        showSimpleMessageDialog(context, context.getString(resId), t.getLocalizedMessage());
+        showErrorDialog(context, context.getString(resId), t);
     }
 
     public static void showSimpleMessageDialog(Context context, int resId, String message) {
@@ -33,5 +37,13 @@ public class DialogUtils {
             }
         })
         .show();
+    }
+
+    private static List<String> getExceptionMessageChain(Throwable t) {
+        List<String> list = new ArrayList<>();
+        for (Throwable c = t; c != null; c = c.getCause()) {
+            list.add(c.getLocalizedMessage());
+        }
+        return list;
     }
 }
