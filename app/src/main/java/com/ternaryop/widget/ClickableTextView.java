@@ -1,6 +1,7 @@
 package com.ternaryop.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+import com.ternaryop.utils.R;
+
 public class ClickableTextView extends android.support.v7.widget.AppCompatTextView implements OnTouchListener {
 
     private int defaultColor;
@@ -16,7 +19,6 @@ public class ClickableTextView extends android.support.v7.widget.AppCompatTextVi
     private int defaultBackgroundColor;
     private int clickedColor;
     private int clickedBackgroundColor;
-    public static final String PACKAGE_NAME = "http://schemas.android.com/apk/res-auto";
 
     public ClickableTextView(Context context, AttributeSet attrs,
             int defStyle) {
@@ -35,12 +37,14 @@ public class ClickableTextView extends android.support.v7.widget.AppCompatTextVi
     }
 
     private void setup(AttributeSet attrs) {
-        if (attrs == null) {
-            clickedColor = Color.BLUE;
-            clickedBackgroundColor = Color.WHITE;
-        } else {
-            clickedColor = attrs.getAttributeIntValue(PACKAGE_NAME, "clickedColor", Color.BLUE);
-            clickedBackgroundColor = attrs.getAttributeIntValue(PACKAGE_NAME, "clickedBackground", Color.WHITE);
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(attrs,
+                R.styleable.com_ternaryop_widget_ClickableTextView, 0, 0);
+        try {
+            clickedColor = a.getColor(R.styleable.com_ternaryop_widget_ClickableTextView_clickedColor, Color.BLUE);
+            clickedBackgroundColor = a.getColor(
+                    R.styleable.com_ternaryop_widget_ClickableTextView_clickedBackground, Color.MAGENTA);
+        } finally {
+            a.recycle();
         }
         setOnTouchListener(this);
     }

@@ -1,14 +1,16 @@
 package com.ternaryop.widget;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.Checkable;
-import android.widget.ImageView;
+
+import com.ternaryop.utils.R;
 
 public class CheckableImageView extends android.support.v7.widget.AppCompatImageView implements Checkable {
-    public static final String PACKAGE_NAME = "http://schemas.android.com/apk/res-auto";
     public static final int DEFAULT_CHECKED_COLOR_FILTER = 0x88000000;
+    public static final int DEFAULT_PRESSED_COLOR = 0x77000000;
     private boolean isChecked;
     private int checkedColorFilter;
 
@@ -28,10 +30,13 @@ public class CheckableImageView extends android.support.v7.widget.AppCompatImage
     }
 
     private void setup(AttributeSet attrs) {
-        if (attrs == null) {
-            checkedColorFilter = DEFAULT_CHECKED_COLOR_FILTER;
-        } else {
-            checkedColorFilter = attrs.getAttributeIntValue(PACKAGE_NAME, "checkedColorFilter", DEFAULT_CHECKED_COLOR_FILTER);
+        TypedArray a = getContext().getTheme().obtainStyledAttributes(attrs,
+                R.styleable.com_ternaryop_widget_CheckableImageView, 0, 0);
+        try {
+            checkedColorFilter = a.getColor(R.styleable.com_ternaryop_widget_CheckableImageView_checkedColorFilter,
+                    DEFAULT_CHECKED_COLOR_FILTER);
+        } finally {
+            a.recycle();
         }
     }
 
@@ -56,16 +61,19 @@ public class CheckableImageView extends android.support.v7.widget.AppCompatImage
     }
 
     /**
-     * Using TouchListener listener doesn't work everytime, for example with gridview_photo_picker_item the color doens't always change
-     * if the action == MotionEvent.ACTION_DOWN returns false then the MotionEvent.ACTION_UP isn't called (this is the documented behavior) and the image stay highlighted
-     * if the action == MotionEvent.ACTION_DOWN returns true the onClickListener isn't called (this is the documented behavior)
+     * Using TouchListener listener doesn't work everytime,
+     * for example with gridview_photo_picker_item the color doens't always change
+     * if the action == MotionEvent.ACTION_DOWN returns false then the MotionEvent.ACTION_UP
+     * isn't called (this is the documented behavior) and the image stay highlighted
+     * if the action == MotionEvent.ACTION_DOWN returns true the onClickListener
+     * isn't called (this is the documented behavior)
      * @param pressed true if pressed, false otherwise
      */
     @Override
     public void setPressed(boolean pressed) {
         if (!isChecked()) {
             if (pressed) {
-                getDrawable().setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                getDrawable().setColorFilter(DEFAULT_PRESSED_COLOR, PorterDuff.Mode.SRC_ATOP);
                 invalidate();
             } else {
                 getDrawable().clearColorFilter();
