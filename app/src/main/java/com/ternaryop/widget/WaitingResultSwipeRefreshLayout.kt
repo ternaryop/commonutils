@@ -1,25 +1,44 @@
 package com.ternaryop.widget
 
 import android.content.Context
+import android.content.res.TypedArray
+import android.graphics.Color
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.AttributeSet
 import android.util.TypedValue
 import com.ternaryop.utils.R
+import com.ternaryop.utils.R.attr.checkedColorFilter
+import com.ternaryop.utils.R.attr.clickedColor
 
 /**
  * Created by dave on 13/09/14.
  * Add a flag to check if waiting result is in progress, the isRefreshing flag can't be used because it is set to true
  * before the onRefresh() is called so testing its value inside the onRefresh() is wrong
  */
-class WaitingResultSwipeRefreshLayout : SwipeRefreshLayout {
-    var isWaitingResult: Boolean = false
+open class WaitingResultSwipeRefreshLayout : SwipeRefreshLayout {
+    var isWaitingResult = false
 
     constructor(context: Context) : super(context) {
         adjustPosition(context)
+        setup(null)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         adjustPosition(context)
+        setup(attrs)
+    }
+
+    private fun setup(attrs: AttributeSet?) {
+        val a = context.theme.obtainStyledAttributes(attrs,
+            R.styleable.com_ternaryop_widget_WaitingResultSwipeRefreshLayout, 0, 0)
+        try {
+            val colorSchemeId = a.getResourceId(R.styleable.com_ternaryop_widget_WaitingResultSwipeRefreshLayout_colorScheme, 0)
+            if (colorSchemeId != 0) {
+                setColorScheme(colorSchemeId)
+            }
+        } finally {
+            a.recycle()
+        }
     }
 
     fun setColorScheme(arrayResId: Int) {
@@ -33,7 +52,7 @@ class WaitingResultSwipeRefreshLayout : SwipeRefreshLayout {
         colorScheme.recycle()
     }
 
-    fun setRefreshingAndWaintingResult(refreshing: Boolean) {
+    fun setRefreshingAndWaitingResult(refreshing: Boolean) {
         isRefreshing = refreshing
         isWaitingResult = refreshing
     }
