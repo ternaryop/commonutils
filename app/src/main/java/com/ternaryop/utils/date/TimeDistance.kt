@@ -13,8 +13,11 @@ import java.util.Calendar
 
 const val APPEND_DATE_FOR_PAST_AND_PRESENT = 1
 
-fun Calendar.yearsBetweenDates(to: Calendar): Int {
-    return Years.yearsBetween(LocalDate(this), LocalDate(to)).years
+/**
+ * Computer the year between the current calendar and the pased one, if null 'now' is used
+ */
+fun Calendar.yearsBetweenDates(to: Calendar? = null): Int {
+    return Years.yearsBetween(LocalDate(this), LocalDate(to ?: Calendar.getInstance())).years
 }
 
 /**
