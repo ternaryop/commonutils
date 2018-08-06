@@ -9,6 +9,9 @@ import java.util.regex.Pattern
  * @return the string with highlighted patterns
  ** */
 fun String.htmlHighlightPattern(pattern: String): String {
+    if (pattern.isBlank()) {
+        return this
+    }
     val sb = StringBuffer()
     val m = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(this)
 
@@ -28,6 +31,10 @@ fun String.htmlHighlightPattern(pattern: String): String {
  * @return stripped string
  */
 fun String.stripHtmlTags(tags: String): String {
-    return Pattern.compile("""</?($tags).*?>""", Pattern.CASE_INSENSITIVE)
-        .matcher(this).replaceAll("")
+    return if (tags.isBlank()) {
+        this
+    } else {
+        Pattern.compile("""</?($tags).*?>""", Pattern.CASE_INSENSITIVE)
+            .matcher(this).replaceAll("")
+    }
 }
