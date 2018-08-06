@@ -142,7 +142,6 @@ object UriUtils {
      * @throws URISyntaxException unable to encode the illegal characters
      * @throws UnsupportedEncodingException unable to encode the url
      */
-    @Throws(URISyntaxException::class, UnsupportedEncodingException::class)
     fun encodeIllegalChar(uriString: String, enc: String, retryCount: Int = RESOLVE_URL_RETRY_COUNT): URI {
         var count = retryCount
         var uriStr = uriString
@@ -165,6 +164,15 @@ object UriUtils {
                 val illChar = input[idx].toString()
                 uriStr = input.replace(illChar, URLEncoder.encode(illChar, enc))
             }
+        }
+    }
+
+    fun resolveRelativeURL(baseURL: String?, link: String): String {
+        val uri = encodeIllegalChar(link, "UTF-8")
+        return when {
+            uri.isAbsolute -> uri.toString()
+            baseURL != null -> encodeIllegalChar(baseURL, "UTF-8").resolve(uri).toString()
+            else -> throw IllegalArgumentException("baseUrl is null")
         }
     }
 }
