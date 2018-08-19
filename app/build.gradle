@@ -5,6 +5,8 @@ apply plugin: 'maven'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXLibVersion}"
+    implementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidXLibVersion}"
+
     implementation "net.danlew:android.joda:${rootProject.ext.jodaLibVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
