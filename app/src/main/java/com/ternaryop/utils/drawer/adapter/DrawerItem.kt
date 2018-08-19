@@ -1,12 +1,14 @@
 package com.ternaryop.utils.drawer.adapter
 
 import android.content.Context
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 
 open class DrawerItem constructor(open var itemId: Int = -1,
     open var title: String? = null,
     open var fragmentClass: Class<out Fragment>? = null,
-    open var isCounterVisible: Boolean = false) {
+    open var isCounterVisible: Boolean = false,
+    open var arguments: Bundle? = null) {
     val isHeader: Boolean
         get() =  fragmentClass == null && title != null
     val isDivider: Boolean
@@ -14,7 +16,10 @@ open class DrawerItem constructor(open var itemId: Int = -1,
     open var badge: String? = null
 
     open fun instantiateFragment(context: Context): Fragment {
-        return Fragment.instantiate(context, fragmentClass!!.name)
+        val fragment = Fragment.instantiate(context, fragmentClass!!.name)
+        fragment.arguments = arguments
+
+        return fragment
     }
 
     @Suppress("UNUSED_PARAMETER")
