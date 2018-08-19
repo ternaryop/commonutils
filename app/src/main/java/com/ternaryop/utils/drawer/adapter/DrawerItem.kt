@@ -1,7 +1,7 @@
 package com.ternaryop.utils.drawer.adapter
 
 import android.content.Context
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 open class DrawerItem constructor(open var itemId: Int = -1,
     open var title: String? = null,
@@ -17,6 +17,7 @@ open class DrawerItem constructor(open var itemId: Int = -1,
         return Fragment.instantiate(context, fragmentClass!!.name)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     class DrawerItemDivider : DrawerItem() {
         override var title: String?
             get() = super.title

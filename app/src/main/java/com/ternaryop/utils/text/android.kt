@@ -1,3 +1,4 @@
+@file:Suppress("DEPRECATION")
 package com.ternaryop.utils.text
 
 import android.text.Html

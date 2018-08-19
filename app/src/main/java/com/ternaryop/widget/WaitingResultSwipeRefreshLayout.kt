@@ -3,7 +3,7 @@ package com.ternaryop.widget
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
-import android.support.v4.widget.SwipeRefreshLayout
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import android.util.AttributeSet
 import android.util.TypedValue
 import com.ternaryop.utils.R

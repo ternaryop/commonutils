@@ -14,7 +14,7 @@ class DrawerAdapter(context: Context) : ArrayAdapter<DrawerItem>(context, 0) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val inflatedView: View
-        val item = getItem(position)
+        val item = getItem(position)!!
         val holder: ViewHolder
 
         if (convertView == null) {
@@ -30,7 +30,7 @@ class DrawerAdapter(context: Context) : ArrayAdapter<DrawerItem>(context, 0) {
             holder = inflatedView.tag as ViewHolder
         }
         // the header hasn't title
-        holder.title?.text = item!!.title
+        holder.title?.text = item.title
 
         // the header hasn't counter
         holder.counter?.let { counter ->
@@ -71,7 +71,7 @@ class DrawerAdapter(context: Context) : ArrayAdapter<DrawerItem>(context, 0) {
 
     fun getItemById(id: Int): DrawerItem? {
         for (i in 0 until count) {
-            val item = getItem(i)
+            val item = getItem(i)!!
 
             if (item.itemId == id) {
                 return item

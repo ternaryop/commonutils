@@ -25,6 +25,7 @@ object MimeType {
         return null
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun createViewIntent(activity: Activity, uriFile: Uri, componentName: ComponentName, mimeType: String): Intent {
         //        return ShareCompat.IntentBuilder.from(activity)
         //                .setStream(uriFile) // uri from FileProvider
@@ -50,7 +51,7 @@ object MimeType {
         uri: Uri,
         mimeType: String,
         useDefaultViewer: Boolean) {
-        val path = uri.path
+        val path = uri.path ?: ""
         if (useDefaultViewer) {
             val componentName = AppPickerUtils.getDefaultViewerComponentName(activity, path, mimeType)
             if (componentName != null) {

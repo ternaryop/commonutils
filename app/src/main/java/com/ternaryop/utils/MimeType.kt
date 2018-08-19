@@ -25,7 +25,7 @@ object MimeType {
         } else mimeType
     }
 
-    fun getMimeTypeFromExtension(extension: String): String {
+    fun getMimeTypeFromExtension(extension: String): String? {
         return map[extension] ?: return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 

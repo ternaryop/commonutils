@@ -2,15 +2,15 @@ package com.ternaryop.utils.drawer.activity
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.ListView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
 import com.ternaryop.utils.R
 import com.ternaryop.utils.drawer.adapter.DrawerAdapter
 import com.ternaryop.utils.drawer.adapter.DrawerItem
@@ -128,7 +128,7 @@ abstract class DrawerActionBarActivity : AppCompatActivity(), DrawerLayout.Drawe
 
         setDrawerListSelection(position)
         closeDrawer()
-        onDrawerItemSelected(adapter.getItem(position))
+        adapter.getItem(position)?.also { onDrawerItemSelected(it) }
         return true
     }
 
@@ -140,7 +140,7 @@ abstract class DrawerActionBarActivity : AppCompatActivity(), DrawerLayout.Drawe
         }
         list.setItemChecked(position, true)
         list.setSelection(position)
-        title = adapter.getItem(position).title
+        title = adapter.getItem(position)?.title
         supportActionBar?.subtitle = null
     }
 
