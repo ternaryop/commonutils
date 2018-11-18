@@ -30,4 +30,20 @@ object Log {
             fosEx.printStackTrace()
         }
     }
+
+    fun error(destFile: File, vararg msg: String) {
+        val date = DATE_TIME_FORMAT.format(Date())
+        try {
+            FileOutputStream(destFile, true).use { fos ->
+                val ps = PrintStream(fos)
+                for (m in msg) {
+                    ps.println("$date - $m")
+                }
+                ps.flush()
+                ps.close()
+            }
+        } catch (fosEx: Exception) {
+            fosEx.printStackTrace()
+        }
+    }
 }
