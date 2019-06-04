@@ -14,31 +14,21 @@ import java.util.Locale
 object Log {
     private val DATE_TIME_FORMAT = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
 
-    fun error(t: Throwable, destFile: File, vararg msg: String) {
-        val date = DATE_TIME_FORMAT.format(Date())
-        try {
-            FileOutputStream(destFile, true).use { fos ->
-                val ps = PrintStream(fos)
-                for (m in msg) {
-                    ps.println("$date - $m")
-                }
-                t.printStackTrace(ps)
-                ps.flush()
-                ps.close()
-            }
-        } catch (fosEx: Exception) {
-            fosEx.printStackTrace()
-        }
+    fun error(destFile: File, vararg msg: String) {
+        error(null, destFile, *msg)
     }
 
-    fun error(destFile: File, vararg msg: String) {
+    fun error(t: Throwable?, destFile: File, vararg msg: String) {
         val date = DATE_TIME_FORMAT.format(Date())
+        // Android Q uses sandbox so we must ensure directories exist
+        destFile.parentFile.mkdirs()
         try {
             FileOutputStream(destFile, true).use { fos ->
                 val ps = PrintStream(fos)
                 for (m in msg) {
                     ps.println("$date - $m")
                 }
+                t?.printStackTrace(ps)
                 ps.flush()
                 ps.close()
             }
