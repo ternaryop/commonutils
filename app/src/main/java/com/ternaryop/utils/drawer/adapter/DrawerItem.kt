@@ -3,6 +3,7 @@ package com.ternaryop.utils.drawer.adapter
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 open class DrawerItem constructor(open var itemId: Int = -1,
     open var title: String? = null,
@@ -15,8 +16,8 @@ open class DrawerItem constructor(open var itemId: Int = -1,
         get() = fragmentClass == null && title == null
     open var badge: String? = null
 
-    open fun instantiateFragment(context: Context): Fragment {
-        val fragment = Fragment.instantiate(context, fragmentClass!!.name)
+    open fun instantiateFragment(context: Context, fragmentManager: FragmentManager): Fragment {
+        val fragment = fragmentManager.fragmentFactory.instantiate(context.classLoader, fragmentClass!!.name)
         fragment.arguments = arguments
 
         return fragment
