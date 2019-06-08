@@ -7,6 +7,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:${rootProject.ext.androidXAppCompatLibVersion}"
     implementation "androidx.recyclerview:recyclerview:${rootProject.ext.androidXRecyclerviewLibVersion}"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:${rootProject.ext.androidXSwiperefreshlayoutLibVersion}"
+    implementation "androidx.preference:preference:${rootProject.ext.androidXPreferenceLibVersion}"
 
     implementation "net.danlew:android.joda:${rootProject.ext.jodaLibVersion}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
