@@ -21,7 +21,7 @@ object Log {
     fun error(t: Throwable?, destFile: File, vararg msg: String) {
         val date = DATE_TIME_FORMAT.format(Date())
         // Android Q uses sandbox so we must ensure directories exist
-        destFile.parentFile.mkdirs()
+        destFile.parentFile?.mkdirs()
         try {
             FileOutputStream(destFile, true).use { fos ->
                 val ps = PrintStream(fos)

@@ -4,12 +4,12 @@ import android.content.Context
 import java.io.File
 
 class FileCache constructor(context: Context, prefix: String? = null) {
-    private val cacheDir = File(context.cacheDir, prefix).parentFile.apply { if (!exists()) mkdirs() }
-    private val prefix: String? = prefix.let { File(it).name }
+    private val cacheDir = File(context.cacheDir, prefix ?: "").apply { parentFile?.apply { if (!exists()) mkdirs() } }
+    private val prefix: String? = prefix?.let { File(it).name }
 
     fun getFile(url: String): File {
         //I identify images by hashcode. Not a perfect solution, good for the demo.
-        var filename = Integer.toHexString(url.hashCode()).toString()
+        var filename = Integer.toHexString(url.hashCode())
         //Another possible solution (thanks to grantland)
         //String filename = URLEncoder.encode(url);
         if (prefix != null) {
@@ -32,8 +32,8 @@ class FileCache constructor(context: Context, prefix: String? = null) {
 
     companion object {
         fun clearCache(context: Context, prefixDir: String) {
-            val cacheDir = File(context.cacheDir, prefixDir)
-            for (f in cacheDir.listFiles()) {
+            val files = File(context.cacheDir, prefixDir).listFiles() ?: return
+            for (f in files) {
                 f.delete()
             }
         }

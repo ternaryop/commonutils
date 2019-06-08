@@ -8,7 +8,7 @@ private val ISO_DATE_FORMAT = SimpleDateFormat("yyyy-MM-dd", Locale.US)
 
 fun Calendar.fromIsoFormat(isoDateString: String): Calendar {
     val c = Calendar.getInstance()
-    c.time = ISO_DATE_FORMAT.parse(isoDateString)
+    c.time = ISO_DATE_FORMAT.parse(isoDateString) ?: return c
     return c
 }
 

@@ -54,8 +54,8 @@ fun File.generateUniqueFileName(): File {
         val matcherCount = patternCount.matcher(name)
         var count = 1
         if (matcherCount.matches()) {
-            name = matcherCount.group(1)
-            count = Integer.parseInt(matcherCount.group(2)) + 1
+            name = matcherCount.group(1)!!
+            count = Integer.parseInt(matcherCount.group(2)!!) + 1
         }
         nameWithExt = "$name ($count)$ext"
         file = File(parentFile, nameWithExt)

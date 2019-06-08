@@ -19,7 +19,7 @@ object MimeType {
         val intent = createViewIntent(activity, uri, componentName, mimeType)
         // check intent existence
         val list = activity.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        if (list != null && list.size > 0) {
+        if (list.size > 0) {
             return intent
         }
         return null

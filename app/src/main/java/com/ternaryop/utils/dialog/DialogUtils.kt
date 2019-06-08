@@ -16,7 +16,7 @@ fun Throwable.getExceptionMessageChain(): List<String> {
     val list = ArrayList<String>()
     var c: Throwable? = this
     while (c != null) {
-        list.add(c.localizedMessage)
+        c.localizedMessage?.also { list.add(it) }
         c = c.cause
     }
     return list
