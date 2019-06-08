@@ -1,9 +1,8 @@
 package com.ternaryop.widget
 
 import android.content.Context
-import android.graphics.PorterDuff
-import androidx.appcompat.widget.AppCompatImageView
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatImageView
 
 class ClickableImageView : AppCompatImageView {
     constructor(context: Context, attrs: AttributeSet,
@@ -25,7 +24,7 @@ class ClickableImageView : AppCompatImageView {
      */
     override fun setPressed(pressed: Boolean) {
         if (pressed) {
-            drawable.setColorFilter(DEFAULT_PRESSED_COLOR, PorterDuff.Mode.SRC_ATOP)
+            drawable.srcAtop(DEFAULT_PRESSED_COLOR)
             invalidate()
         } else {
             drawable.clearColorFilter()

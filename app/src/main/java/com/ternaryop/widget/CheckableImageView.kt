@@ -1,10 +1,9 @@
 package com.ternaryop.widget
 
 import android.content.Context
-import android.graphics.PorterDuff
-import androidx.appcompat.widget.AppCompatImageView
 import android.util.AttributeSet
 import android.widget.Checkable
+import androidx.appcompat.widget.AppCompatImageView
 import com.ternaryop.utils.R
 
 class CheckableImageView : AppCompatImageView, Checkable {
@@ -41,7 +40,7 @@ class CheckableImageView : AppCompatImageView, Checkable {
     override fun setChecked(checked: Boolean) {
         isChecked = checked
         if (checked) {
-            drawable.setColorFilter(checkedColorFilter, PorterDuff.Mode.SRC_ATOP)
+            drawable.srcAtop(checkedColorFilter)
         } else {
             drawable.colorFilter = null
         }
@@ -63,7 +62,7 @@ class CheckableImageView : AppCompatImageView, Checkable {
     override fun setPressed(pressed: Boolean) {
         if (!isChecked()) {
             if (pressed) {
-                drawable.setColorFilter(DEFAULT_PRESSED_COLOR, PorterDuff.Mode.SRC_ATOP)
+                drawable.srcAtop(DEFAULT_PRESSED_COLOR)
                 invalidate()
             } else {
                 drawable.clearColorFilter()
