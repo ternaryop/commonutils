@@ -2,7 +2,7 @@ package com.ternaryop.utils.dialog.app
 
 import android.content.ComponentName
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 /**
  * Created by dave on 31/12/14.
