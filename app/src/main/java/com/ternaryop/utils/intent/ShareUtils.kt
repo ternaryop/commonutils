@@ -10,8 +10,7 @@ data class ShareChooserParams(
     val destFileUri: Uri,
     val title: String,
     val subject: String,
-    val mimeType: String = "image/jpeg") {
-}
+    val mimeType: String = "image/jpeg")
 
 object ShareUtils {
     fun showShareChooser(context: Context, shareChooserParams: ShareChooserParams) {
