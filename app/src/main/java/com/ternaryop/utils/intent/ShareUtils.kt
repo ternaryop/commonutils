@@ -6,20 +6,27 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 
+data class ShareChooserParams(
+    val destFileUri: Uri,
+    val title: String,
+    val subject: String,
+    val mimeType: String = "image/jpeg") {
+}
+
 object ShareUtils {
-    fun showShareChooser(context: Context, uri: Uri, mimeType: String, subject: String, title: String) {
+    fun showShareChooser(context: Context, shareChooserParams: ShareChooserParams) {
         val intent = Intent(Intent.ACTION_SEND)
-            .setDataAndType(uri, mimeType)
-            .putExtra(Intent.EXTRA_SUBJECT, subject)
-            .putExtra(Intent.EXTRA_STREAM, uri)
+            .setDataAndType(shareChooserParams.destFileUri, shareChooserParams.mimeType)
+            .putExtra(Intent.EXTRA_SUBJECT, shareChooserParams.subject)
+            .putExtra(Intent.EXTRA_STREAM, shareChooserParams.destFileUri)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
-        context.startActivity(Intent.createChooser(intent, title))
+        context.startActivity(Intent.createChooser(intent, shareChooserParams.title))
     }
 
     @Deprecated(
-        message = "Do not property work with Api level 29, use showShareChooser",
+        message = "Do not properly work with Api level 29, use showShareChooser",
         replaceWith = ReplaceWith(
             expression = "showShareChooser",
             imports = ["com.ternaryop.utils.intent.ShareUtils.showShareChooser"]
