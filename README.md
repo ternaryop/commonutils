@@ -3,6 +3,17 @@ commonutils
 
 Android common utils for my own projects
 
+Local Maven distribution
+========================
+
+    ./gradlew uploadArchives
+
+Bintray distribution
+========================
+
+    ./gradlew bintrayUpload
+
+
 Android Studio configuration
 ============================
 
