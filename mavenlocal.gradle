@@ -1,0 +1,12 @@
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: 'file://' + new File(System.getProperty('user.home'), '.m2/repository').absolutePath)
+            pom.version = rootProject.ext.publishPackage.version
+            pom.groupId = rootProject.ext.publishPackage.groupId
+            pom.artifactId = rootProject.ext.publishPackage.artifactId
+        }
+    }
+}

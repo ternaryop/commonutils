@@ -1,9 +1,10 @@
 package com.ternaryop.utils.date
 
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import org.joda.time.Years
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
+import java.time.temporal.ChronoUnit.YEARS
 import java.util.Calendar
 
 /**
@@ -13,11 +14,22 @@ import java.util.Calendar
 
 const val APPEND_DATE_FOR_PAST_AND_PRESENT = 1
 
+private val DATE_FORMATTER_TOMORROW = DateTimeFormatter.ofPattern("'Tomorrow at' HH:mm")
+private val DATE_FORMATTER_TODAY = DateTimeFormatter.ofPattern("'Today at' HH:mm")
+private val DATE_FORMATTER_DATE = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+private val DATE_FORMATTER_IN_DAYS = DateTimeFormatter.ofPattern("'In %1\$d days at' HH:mm")
+
 /**
- * Computer the year between the current calendar and the pased one, if null 'now' is used
+ * Calculate the years between the current calendar and the passed one, if null 'now' is used
  */
 fun Calendar.yearsBetweenDates(to: Calendar? = null): Int {
-    return Years.yearsBetween(LocalDate(this), LocalDate(to ?: Calendar.getInstance())).years
+    val now = LocalDate.of(get(Calendar.YEAR), get(Calendar.MONTH) + 1, get(Calendar.DAY_OF_MONTH))
+
+    val toLocal = to?.run {
+        LocalDate.of(get(Calendar.YEAR), get(Calendar.MONTH) + 1, get(Calendar.DAY_OF_MONTH))
+    } ?: LocalDate.now()
+
+    return YEARS.between(now, toLocal).toInt()
 }
 
 /**
@@ -29,9 +41,10 @@ fun Calendar.yearsBetweenDates(to: Calendar? = null): Int {
 fun Long.daysSinceNow(): Long {
     return if (this == Long.MAX_VALUE) {
         Long.MAX_VALUE
-    } else Days.daysBetween(LocalDate(this), LocalDate()).days.toLong()
+    } else {
+        DAYS.between(millisToLocalDate(), LocalDate.now())
+    }
 }
-
 
 fun Long.formatPublishDaysAgo(flags: Int): String {
     val dayString = StringBuffer()
@@ -39,24 +52,27 @@ fun Long.formatPublishDaysAgo(flags: Int): String {
     if (this == Long.MAX_VALUE) {
         dayString.append("Never Published")
     } else {
-        val days = daysSinceNow()
+        val localDateTime = millisToLocalDateTime()
+        val days = ChronoUnit.DAYS.between(localDateTime.toLocalDate(), LocalDate.now())
         if (days < 0) {
             if (days == -1L) {
-                DateTimeFormat.forPattern("'Tomorrow at' HH:mm").printTo(dayString, this)
+                DATE_FORMATTER_TOMORROW.formatTo(localDateTime, dayString)
             } else {
-                val s = DateTimeFormat.forPattern("'In %1\$d days at' HH:mm").print(this)
+                val s = DATE_FORMATTER_IN_DAYS.format(localDateTime)
                 dayString.append(String.format(s, -days))
             }
         } else {
             when (days) {
-                0L -> DateTimeFormat.forPattern("'Today at' HH:mm").printTo(dayString, this)
+                0L -> {
+                    DATE_FORMATTER_TODAY.formatTo(localDateTime, dayString)
+                }
                 1L -> dayString.append("Yesterday")
                 else -> dayString.append(String.format("%1\$d days ago", days))
             }
             val appendDate = flags and APPEND_DATE_FOR_PAST_AND_PRESENT != 0
             if (days > 1 && appendDate) {
                 dayString.append(" (")
-                DateTimeFormat.forPattern("dd/MM/yyyy").printTo(dayString, this)
+                DATE_FORMATTER_DATE.formatTo(localDateTime, dayString)
                 dayString.append(")")
             }
         }
