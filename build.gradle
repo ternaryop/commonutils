@@ -17,7 +17,7 @@ buildscript {
     }
 
     ext.publishPackage = [
-        version: '1.4.3',
+        version: '1.4.4',
         groupId: 'com.ternaryop',
         artifactId: 'utils',
         bintrayRepoName: 'CommonUtils',
