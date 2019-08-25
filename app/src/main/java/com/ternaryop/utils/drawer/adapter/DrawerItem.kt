@@ -9,7 +9,8 @@ open class DrawerItem constructor(open var itemId: Int = -1,
     open var title: String? = null,
     open var fragmentClass: Class<out Fragment>? = null,
     open var isCounterVisible: Boolean = false,
-    open var arguments: Bundle? = null) {
+    open var arguments: Bundle? = null,
+    open var argumentsBuilder: (() -> Bundle?)? = null) {
     val isHeader: Boolean
         get() =  fragmentClass == null && title != null
     val isDivider: Boolean
@@ -18,7 +19,7 @@ open class DrawerItem constructor(open var itemId: Int = -1,
 
     open fun instantiateFragment(context: Context, fragmentManager: FragmentManager): Fragment {
         val fragment = fragmentManager.fragmentFactory.instantiate(context.classLoader, fragmentClass!!.name)
-        fragment.arguments = arguments
+        fragment.arguments = argumentsBuilder?.let { it() } ?: arguments
 
         return fragment
     }
