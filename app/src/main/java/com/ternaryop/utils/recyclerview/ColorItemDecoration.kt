@@ -11,10 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
  * Created by dave on 13/08/17.
  */
 
-class ColorItemDecoration : RecyclerView.ItemDecoration() {
+open class ColorItemDecoration : RecyclerView.ItemDecoration() {
     private val background: ColorDrawable = ColorDrawable(Color.TRANSPARENT)
 
-    fun setColor(@ColorInt color: Int) {
+    open fun setColor(@ColorInt color: Int) {
         background.color = color
     }
 
