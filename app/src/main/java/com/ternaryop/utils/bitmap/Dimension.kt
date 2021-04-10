@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.util.DisplayMetrics
-import android.view.WindowManager
 
 fun Bitmap.resize(newWidth: Float, newHeight: Float): Bitmap {
     val scaleWidth = newWidth / width
@@ -19,9 +18,6 @@ fun Bitmap.resize(newWidth: Float, newHeight: Float): Bitmap {
 
 fun Bitmap.scaleForDefaultDisplay(context: Context): Bitmap {
     val metrics = DisplayMetrics()
-    (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager)
-        .defaultDisplay
-        .getMetrics(metrics)
     val scaleWidth = metrics.scaledDensity
     val scaleHeight = metrics.scaledDensity
     // create a matrix for the manipulation

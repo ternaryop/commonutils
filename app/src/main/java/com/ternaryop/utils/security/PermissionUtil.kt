@@ -27,8 +27,8 @@ object PermissionUtil {
             }
 
             alert
-                .setPositiveButton(android.R.string.yes, dialogClickListener)
-                .setNegativeButton(android.R.string.no, dialogClickListener)
+                .setPositiveButton(android.R.string.ok, dialogClickListener)
+                .setNegativeButton(android.R.string.cancel, dialogClickListener)
                 .show()
         } else {
             ActivityCompat.requestPermissions(activity, arrayOf(permission), requestCode)

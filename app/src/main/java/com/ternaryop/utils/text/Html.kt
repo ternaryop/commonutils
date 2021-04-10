@@ -5,7 +5,6 @@ import java.util.regex.Pattern
 /**
  * Surround all pattern strings found on text with a ** (bold) tag
  * @param pattern the pattern to surround
- * @param text the whole string
  * @return the string with highlighted patterns
  ** */
 fun String.htmlHighlightPattern(pattern: String): String {
@@ -27,7 +26,6 @@ fun String.htmlHighlightPattern(pattern: String): String {
 /**
  * Strip all specified HTML tags contained into string
  * @param tags tags separated by pipe (eg "a|br|img")
- * @param string html string to strip
  * @return stripped string
  */
 fun String.stripHtmlTags(tags: String): String {
