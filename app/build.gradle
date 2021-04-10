@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply from: '../mavenlocal.gradle'
-apply from: '../bintrayconfig.gradle'
+apply plugin: "com.vanniktech.maven.publish"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -15,13 +14,12 @@ dependencies {
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName rootProject.ext.publishPackage.version
+        versionName VERSION_NAME
     }
     buildTypes {
         release {
