@@ -14,12 +14,14 @@ Maven Central distribution
     ./gradlew publish --no-daemon --no-parallel
     ./gradlew closeAndReleaseRepository
 
-The properties shown below are present inside the global ``~/.gradle/gradle.properties` file
+The properties shown below are present inside the global `~/.gradle/gradle.properties` file
 
     signing.password
     signing.secretKeyRingFile
     mavenCentralUsername
     mavenCentralPassword
+
+On KeePass, under `sonatype.org maven central`, are stored all files
 
 It's possible to manually close and release the library (this replaces the gradle task `closeAndReleaseRepository`).
 
