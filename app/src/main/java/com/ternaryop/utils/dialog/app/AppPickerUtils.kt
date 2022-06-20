@@ -12,7 +12,7 @@ object AppPickerUtils {
     private const val DEFAULT_VIEWER_PREFIX = "default_viewer_"
 
     fun setDefaultViewer(context: Context, mimeType: String, activityPackage: String, activityName: String) {
-        require(mimeType.isBlank()) { "Default viewer type can't be empty" }
+        require(mimeType.isNotBlank()) { "Default viewer type can't be empty" }
 
         PreferenceManager.getDefaultSharedPreferences(context)
             .edit()

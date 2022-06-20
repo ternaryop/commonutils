@@ -21,8 +21,8 @@ import com.ternaryop.utils.R
  * Created by dave on 01/05/14.
  * Helper dialog to select app from installed
  */
-class AppPickerDialog(context: Context, private val fullPath: String, private val mimeType: String)
-    : Dialog(context), AdapterView.OnItemClickListener, View.OnClickListener {
+class AppPickerDialog(context: Context, private val fullPath: String, private val mimeType: String) :
+    Dialog(context), AdapterView.OnItemClickListener, View.OnClickListener {
     private var inflater: LayoutInflater? = null
     private val resolveInfoAdapter: ResolveInfoAdapter
     private var manager: PackageManager? = null
@@ -72,25 +72,27 @@ class AppPickerDialog(context: Context, private val fullPath: String, private va
     private fun onOpenApp() {
         dismiss()
 
-        if (selectedApp != null) {
+        selectedApp?.also { app ->
             if (defaultViewerRadio.isChecked) {
                 // remove default path (if any)
                 AppPickerUtils.resetDefaultViewer(context, fullPath)
                 val type = mimeType.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 if (type.size == 2 && type[0] != "*" && type[1] != "*") {
-                    val activity = selectedApp!!.activityInfo
-                    AppPickerUtils.setDefaultViewer(context, mimeType,
-                        activity.applicationInfo.packageName, activity.name)
+                    val activity = app.activityInfo
+                    AppPickerUtils.setDefaultViewer(
+                        context, mimeType,
+                        activity.applicationInfo.packageName, activity.name
+                    )
                 }
             } else if (defaultViewerPerFileRadio.isChecked) {
-                val activity = selectedApp!!.activityInfo
-                AppPickerUtils.setDefaultViewer(context, fullPath,
-                    activity.applicationInfo.packageName, activity.name)
+                val activity = app.activityInfo
+                AppPickerUtils.setDefaultViewer(
+                    context, fullPath,
+                    activity.applicationInfo.packageName, activity.name
+                )
             }
         }
-        if (dialogClickListener != null) {
-            dialogClickListener!!.onClick(this, DialogInterface.BUTTON_POSITIVE)
-        }
+        dialogClickListener?.onClick(this, DialogInterface.BUTTON_POSITIVE)
     }
 
     fun setOpenAppClickListener(dialogClickListener: DialogInterface.OnClickListener) {
@@ -98,10 +100,13 @@ class AppPickerDialog(context: Context, private val fullPath: String, private va
     }
 
     private fun getActivitiesFromMimeType(mimeType: String): List<ResolveInfo> {
+        val manager = manager ?: return emptyList()
         val intent = Intent(Intent.ACTION_VIEW, null)
         intent.type = mimeType
-        val resolveInfos = manager!!.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        resolveInfos.sortWith(Comparator { lhs, rhs -> lhs.loadLabel(manager).toString().compareTo(rhs.loadLabel(manager).toString()) })
+        val resolveInfos = manager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        resolveInfos.sortWith { lhs, rhs ->
+            lhs.loadLabel(manager).toString().compareTo(rhs.loadLabel(manager).toString())
+        }
         return resolveInfos
     }
 
@@ -133,8 +138,8 @@ class AppPickerDialog(context: Context, private val fullPath: String, private va
         }
 
         private inner class ViewHolder(vi: View) {
-            internal val text = vi.findViewById<View>(R.id.text1) as TextView
-            internal val image = vi.findViewById<View>(R.id.image1) as ImageView
+            val text = vi.findViewById<View>(R.id.text1) as TextView
+            val image = vi.findViewById<View>(R.id.image1) as ImageView
         }
     }
 }

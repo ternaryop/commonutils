@@ -24,10 +24,12 @@ const val RESOLVE_URL_RETRY_COUNT = 20
  * Method for return file path of Gallery image
  *
  * @param context
+ * @param downloadId the id appended when the Uri authority is DownloadsProvider,
+ * if null DocumentsContract.getDocumentId() is used as default value
  * @return path of the selected image file from gallery
  */
-fun Uri.getPath(context: Context): String? {
-    //check here to KITKAT or new version
+fun Uri.getPath(context: Context, downloadId: Long? = null): String? {
+    // check here to KITKAT or new version
     val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
     // DocumentProvider
@@ -43,9 +45,11 @@ fun Uri.getPath(context: Context): String? {
             }
         } else if (isDownloadsDocument) {
             // DownloadsProvider
-            val id = DocumentsContract.getDocumentId(this)
+            val id = downloadId ?: DocumentsContract.getDocumentId(this).toLong()
             val contentUri = ContentUris.withAppendedId(
-                Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id))
+                Uri.parse("content://downloads/public_downloads"),
+                id
+            )
 
             return contentUri.getDataColumn(context, null, null)
         } else if (isMediaDocument) {
@@ -122,12 +126,18 @@ inline val Uri.isMediaDocument: Boolean
 inline val Uri.isGooglePhotosUri: Boolean
     get() = "com.google.android.apps.photos.content" == authority
 
-fun Uri.getRealPathAndMimeFromUri(context: Context): Pair<String, String>? {
-        val proj = arrayOf(MediaStore.Images.Media.MIME_TYPE)
-        return context.contentResolver.query(this, proj, null, null, null)?.use { cursor ->
-            cursor.moveToFirst()
-            Pair.create(getPath(context), cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)))
-        }
+fun Uri.getRealPathAndMimeFromUri(context: Context): Pair<String, String?>? {
+    return context.contentResolver.query(this, null, null, null, null)?.use { cursor ->
+        val bucketIdIndex = cursor.getColumnIndex(MediaStore.Images.Media.BUCKET_ID)
+
+        cursor.moveToFirst()
+
+        val bucketId = if (bucketIdIndex == -1) -1 else cursor.getString(bucketIdIndex).toLong()
+
+        val mimeTypeIndex = cursor.getColumnIndex(MediaStore.Images.Media.MIME_TYPE)
+        val mimeType = if (mimeTypeIndex == -1) null else cursor.getString(mimeTypeIndex)
+        Pair.create(getPath(context, bucketId), mimeType)
+    }
 }
 
 object UriUtils {
