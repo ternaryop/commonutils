@@ -1,19 +1,26 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 apply plugin: "com.github.ben-manes.versions"
 
 apply from: 'https://raw.githubusercontent.com/dafi/gradle-scripts/main/dependencyUpdatesReplacer.gradle'
 
 buildscript {
-    ext.kotlin_version = '1.6.21'
+    ext.kotlin_version = '1.7.10'
     ext {
         minSdkVersion = 26
-        targetSdkVersion = 30
-        compileSdkVersion = 30
-        androidXAppCompatLibVersion = '1.6.0-alpha04'
-        androidXRecyclerviewLibVersion = '1.2.1'
+        targetSdkVersion = 33
+        compileSdkVersion = 33
+
+        androidXAppCompatLibVersion = '1.6.0-beta01'
+        androidXCoreKtx = '1.9.0-beta01'
+        androidXRecyclerviewLibVersion = '1.3.0-beta02'
         androidXSwiperefreshlayoutLibVersion = '1.2.0-alpha01'
         androidXPreferenceLibVersion = '1.2.0'
+
+        junitLibVersion = '4.13.2'
+
+        androidXEspressoCoreLibVersion = '3.5.0-alpha07'
+        androidXTestRunner = '1.5.0-alpha04'
+
     }
 
     repositories {
@@ -22,27 +29,32 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.3'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.42.0"
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.21.0"
 
-        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.17.0'
-        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.5.0'
+        classpath 'com.vanniktech:gradle-maven-publish-plugin:0.21.0'
+        // latest dokka version throws NoSuchMethodError so we stay with an older version
+        // https://github.com/Kotlin/dokka/issues/2452
+        classpath 'org.jetbrains.dokka:dokka-gradle-plugin:1.6.10'
     }
 }
 
 allprojects {
+    apply plugin: "io.gitlab.arturbosch.detekt"
+
+    detekt {
+        buildUponDefaultConfig = true
+        config = files("${project.rootDir}/config/detekt/detekt.yml")
+        parallel = true
+    }
+
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
     }
 
-    plugins.withId("com.vanniktech.maven.publish") {
-        mavenPublish {
-            sonatypeHost = "S01"
-        }
-    }
 }
 
 task clean(type: Delete) {
